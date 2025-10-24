@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  mcp-server:
+    build: .
+    container_name: dohod-ru-mcp
+    restart: unless-stopped
+    env_file:
+      - .env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.mcp-dohod-ru.rule=Host(`dohod.mcp.ru`)"
+      - "traefik.http.routers.mcp-dohod-ru.entrypoints=websecure"
+      - "traefik.http.routers.mcp-dohod-ru.tls.certresolver=letsencrypt"
+      - "traefik.http.services.mcp-dohod-ru.loadbalancer.server.port=${PORT}"
+  mcp-server-dev:
+    build: .
+    container_name: dohod-ru-mcp-dev
+    profiles:
+      - dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+    restart: unless-stopped
+
+networks:
+  traefik:
+    external: true
