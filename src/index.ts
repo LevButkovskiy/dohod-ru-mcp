@@ -19,6 +19,7 @@ server.start({
 	transportType: 'httpStream',
 	httpStream: {
 		port,
+		endpoint: '/mcp',
 	},
 });
 
