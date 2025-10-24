@@ -12,8 +12,5 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production && npm cache clean --force
 COPY --from=builder /app/dist ./dist
-# Открываем порт из переменной окружения
-EXPOSE $PORT
-
 # Запускаем MCP сервер
 ENTRYPOINT ["node", "dist/index.js"]
